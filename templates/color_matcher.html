@@ -1,0 +1,62 @@
+{% extends "layout.html" %}
+ 
+{% block title %}Combination Finder{% endblock %}
+
+{% block body %}
+     <ul class="nav nav-tabs" id="ColorTabs" role="tablist">
+          <li class="nav-item" role="presentation">
+               <button class="nav-link active" id="pick-tab" data-bs-toggle="tab" data-bs-target="#pick" type="button" role="tab" aria-controls="pick" aria-selected="true">Pick A Color</button>
+          </li>
+          <li class="nav-item" role="presentation">
+               <button class="nav-link" id="upload-tab" data-bs-toggle="tab" data-bs-target="#upload" type="button" role="tab" aria-controls="upload" aria-selected="false">Upload An Image</button>
+          </li>
+     </ul>
+     <form method="POST" action="/color_matcher" enctype="multipart/form-data">
+          <div class="tab-content" id="myTabContent">
+          <!-- Pick a color tab content -->
+               <div class="tab-pane fade show active" id="pick" role="tabpanel" aria-labelledby="pick-tab">
+                    <div class="container mt-4">
+                         <div class="row">
+                              <div class="col-md-6">
+                                   <h4>Select a Color</h4>
+                                   <input type="color" id="colorPicker" name="color" class="form-control form-control-color" value="#ff0000" >
+                                   <button type="submit" class="btn btn-primary mt-3">Find Combinations</button>
+                              </div>
+                              <div class="col-md-6">
+                                   <h4>Selected Color</h4>
+                                   <div id="selectedColor" style="width:100%; height:100px; background-color:#ff0000; border:1px solid #000;"></div>
+                              </div>
+                         </div>
+                         <div class="row mt-4">
+                              <div class="col-12">
+                                   <h4>Matching Combinations: </h4>
+                                   <div id="colorCombinations" class="d-flex flex-wrap gap-3"></div>
+                              </div>
+                         </div>
+                    </div>
+               </div>
+               <!-- Upload an image tab content -->
+               <div class="tab-pane fade" id="upload" role="tabpanel" aria-labelledby="upload-tab">
+                    <div class="container mt-4">
+                         <div class="row">
+                              <div class="col-md-6">
+                                   <h4>Upload an Image</h4>
+                                   <input type="file" id="imageUpload" accept="image/*" class="form-control">
+                                   <button type="submit" class="btn btn-primary mt-3">Extract Color & Find Combinations</button>
+                              </div>
+                              <div class="col-md-6">
+                                   <h4>Extracted Color</h4>
+                                   <div id="extractedColor" style="width:100%; height:100px; background-color:#ffffff; border:1px solid #000;"></div>
+                              </div>
+                         </div>
+                         <div class="row mt-4">
+                              <div class="col-12">
+                                   <h4>Matching Combinations: </h4>
+                                   <div id="imageColorCombinations" class="d-flex flex-wrap gap-3"></div>
+                              </div>
+                         </div>
+                    </div>
+               </div>
+          </div>
+     </form>
+{% endblock %}

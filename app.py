@@ -1,9 +1,12 @@
 import os
+import io
 from flask import Flask, render_template, request, redirect, session
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_session import Session
 from functools import wraps
+from PIL import Image
+
 
 
 app = Flask(__name__)
@@ -23,6 +26,16 @@ app.config["SQLALCHEMY_DATABASE_URI"] = f"sqlite:///{DB_PATH}"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 db = SQLAlchemy(app)
+
+def get_dominant_color(image):
+            image = Image.open(image)
+            image = image.resize((150, 150))
+            result = image.convert("P", palette=Image.ADAPTIVE, colors=1)
+            dominant_color = tuple(result.getpalette()[:3])
+            return dominant_color
+
+def rgb_to_hex(rgb):
+            return '#%02x%02x%02x' % tuple(rgb)
 
 def login_required(f):
     @wraps(f)
@@ -84,9 +97,17 @@ def saved():
 
 @app.route("/color_matcher", methods=["GET", "POST"])
 def color_matcher():
-    if request.method == "GET":
-        return render_template("color_matcher.html")
-    elif request.method == "POST":
-        color = request.form.get("color")
-        print(color)
-        return render_template("color_matcher.html", color=color)
+    tab = "pick"
+    hex_color = None
+    if request.method == "POST":
+        image = request.files.get("image")
+        if not image:
+            return "No image uploaded", 400
+        elif image:
+            dominant_color = get_dominant_color(image)
+            hex_color = rgb_to_hex(dominant_color)
+        if "image" in request.files:
+             tab = "upload"
+        elif "color" in request.form:
+             tab = "pick"
+    return render_template("color_matcher.html", extracted_color=hex_color, tab=tab)

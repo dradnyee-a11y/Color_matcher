@@ -5,16 +5,16 @@
 {% block body %}
      <ul class="nav nav-tabs" id="ColorTabs" role="tablist">
           <li class="nav-item" role="presentation">
-               <button class="nav-link active" id="pick-tab" data-bs-toggle="tab" data-bs-target="#pick" type="button" role="tab" aria-controls="pick" aria-selected="true">Pick A Color</button>
+               <button class="nav-link {% if tab == 'pick' %}active{% endif %}" id="pick-tab" data-bs-toggle="tab" data-bs-target="#pick" type="button" role="tab" aria-controls="pick" aria-selected="{% if tab == 'pick' %} true {% else %} false {% endif %}">Pick A Color</button>
           </li>
           <li class="nav-item" role="presentation">
-               <button class="nav-link" id="upload-tab" data-bs-toggle="tab" data-bs-target="#upload" type="button" role="tab" aria-controls="upload" aria-selected="false">Upload An Image</button>
+               <button class="nav-link {% if tab == 'upload' %}active{% endif %}" id="upload-tab" data-bs-toggle="tab" data-bs-target="#upload" type="button" role="tab" aria-controls="upload" aria-selected="{% if tab == 'upload' %} true {% else %} false {% endif %}">Upload An Image</button>
           </li>
      </ul>
      <form method="POST" action="/color_matcher" enctype="multipart/form-data">
           <div class="tab-content" id="myTabContent">
           <!-- Pick a color tab content -->
-               <div class="tab-pane fade show active" id="pick" role="tabpanel" aria-labelledby="pick-tab">
+               <div class="tab-pane fade show {% if tab == 'pick' %} show active {% endif %}" id="pick" role="tabpanel" aria-labelledby="pick-tab">
                     <div class="container mt-4">
                          <div class="row">
                               <div class="col-md-6">
@@ -36,17 +36,17 @@
                     </div>
                </div>
                <!-- Upload an image tab content -->
-               <div class="tab-pane fade" id="upload" role="tabpanel" aria-labelledby="upload-tab">
+               <div class="tab-pane fade {% if tab == 'upload'%} show active {% endif %}" id="upload" role="tabpanel" aria-labelledby="upload-tab">
                     <div class="container mt-4">
                          <div class="row">
                               <div class="col-md-6">
                                    <h4>Upload an Image</h4>
-                                   <input type="file" id="imageUpload" accept="image/*" class="form-control">
+                                   <input type="file" id="imageUpload" name="image" accept="image/*" class="form-control">
                                    <button type="submit" class="btn btn-primary mt-3">Extract Color & Find Combinations</button>
                               </div>
                               <div class="col-md-6">
                                    <h4>Extracted Color</h4>
-                                   <div id="extractedColor" style="width:100%; height:100px; background-color:#ffffff; border:1px solid #000;"></div>
+                                   <div id="extractedColor" style="width:100%; height:100px; background-color: {{ extracted_color | default('#ffffff') }}; border:1px solid #000;"></div>
                               </div>
                          </div>
                          <div class="row mt-4">
@@ -59,4 +59,5 @@
                </div>
           </div>
      </form>
+
 {% endblock %}

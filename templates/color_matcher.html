@@ -12,27 +12,22 @@
           </li>
      </ul>
      <form method="POST" action="/color_matcher" enctype="multipart/form-data">
-          <div class="tab-content" id="myTabContent">
+          <div class="tab-content" id="TabContent">
           <!-- Pick a color tab content -->
                <div class="tab-pane fade show {% if tab == 'pick' %} show active {% endif %}" id="pick" role="tabpanel" aria-labelledby="pick-tab">
                     <div class="container mt-4">
                          <div class="row">
                               <div class="col-md-6">
                                    <h4>Select a Color</h4>
-                                   <input type="color" id="colorPicker" name="color" class="form-control form-control-color" value="#ff0000" >
+                                   <input type="color" id="colorPicker" name="color" class="form-control form-control-color" value= {{ color }}>
                                    <button type="submit" class="btn btn-primary mt-3">Find Combinations</button>
                               </div>
                               <div class="col-md-6">
                                    <h4>Selected Color</h4>
-                                   <div id="selectedColor" style="width:100%; height:100px; background-color:#ff0000; border:1px solid #000;"></div>
+                                   <div id="selectedColor" style="width:100%; height:100px; background-color: {% if color %}{{ color }}{% else %} #ffffff {% endif %};; border:1px solid #000;"></div>
                               </div>
                          </div>
-                         <div class="row mt-4">
-                              <div class="col-12">
-                                   <h4>Matching Combinations: </h4>
-                                   <div id="colorCombinations" class="d-flex flex-wrap gap-3"></div>
-                              </div>
-                         </div>
+                         
                     </div>
                </div>
                <!-- Upload an image tab content -->
@@ -46,13 +41,7 @@
                               </div>
                               <div class="col-md-6">
                                    <h4>Extracted Color</h4>
-                                   <div id="extractedColor" style="width:100%; height:100px; background-color: {{ extracted_color | default('#ffffff') }}; border:1px solid #000;"></div>
-                              </div>
-                         </div>
-                         <div class="row mt-4">
-                              <div class="col-12">
-                                   <h4>Matching Combinations: </h4>
-                                   <div id="imageColorCombinations" class="d-flex flex-wrap gap-3"></div>
+                                   <div id="extractedColor" style="width:100%; height:100px; background-color: {% if image_uploaded == True %} {{ extracted_color }} {% else %} '#ffffff' {% endif %}; border:1px solid #000;"></div>
                               </div>
                          </div>
                     </div>
@@ -60,4 +49,50 @@
           </div>
      </form>
 
+     
+     <!-- Display color combinations for pick -->
+     <div class="row m t-4">
+          <div class="col-12">
+               <h4 class="match">Color Combinations: </h4>
+               <div class="d-flex align-items-center gap-3">
+                    {% for palette in palettes %}
+                         <div class="d-flex gap-1">
+                              <h5>{{ palette }}:</h5>
+                         {% for color in palettes[palette] %}
+                              <div style="width:100px; height:100px; background-color: {{ color }}; border:1px solid #000;"></div>
+                         {% endfor%}
+                         </div>
+                    {% endfor %}
+               </div>
+          </div>
+     </div>
+
+     <!-- Display Color Combinations for upload-->
+      <div class="row mt-4">
+          <div class="col-12">
+               <h4 class="match">Color Combinations: </h4>
+               {% if image_uploaded == True %}
+                    {% for palette in palettes %}
+                         <div id="combinations" class="d-flex flex-wrap gap-3">
+                              <h5>{{ palette }}:</h5>
+                         {% for color in palettes[palette] %}
+                              <div style="width:100px; height:100px; background-color: {{ color }}; border:1px solid #000;"></div>
+                         {% endfor%}
+                    {% endfor %}
+                    </div>
+                    
+               {% endif %}
+          </div>
+     </div>
+     <form method="POST" action="/combos">
+          <input type="hidden" name="action" value="save_palette">
+          <input type="hidden" name="base_color" value="{{ extracted_color }}">
+          <input type="hidden" name="complementary" value="{{ palettes['complementary'] }}">
+          <input type="hidden" name="analogous" value="{{ palettes['analogous'] }}">
+          <input type="hidden" name="triadic" value="{{ palettes['triadic'] }}">
+          <input autocomplete="off" type="text" name="palette_name" placeholder="Palette Name">
+          <button type="submit" class="btn btn-success" id="save">Save Palette</button>
+     </form> 
+
+     <span id="inst">Wondering how to use them? Check out the <a href="/wheel">color wheel!</a></span>
 {% endblock %}

@@ -1,0 +1,27 @@
+{% extends "layout.html" %}
+
+{% block title %}Saved Palettes{% endblock %}
+
+{% block body %}
+     <div>
+        <h2>Saved Palettes</h2>
+     </div>
+     <div>
+        {% if palettes|length == 0 %}
+            <p>No palettes saved yet.</p>
+        {% else %}
+            {% for palette in palettes %}
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title">Palette {{ loop.index }}</h5>
+                        <div class="d-flex align-items-center gap-2">
+                            <h6>Base Color:</h6>
+                            <div style="width:100px; height:100px; background-color: {{ palette.base_color }}; border:1px solid #000;"></div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        {% endif %}
+     </div>
+        
+{% endblock %}

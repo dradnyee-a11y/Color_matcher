@@ -1,0 +1,69 @@
+.match {
+    margin-bottom: 20px;
+}
+
+#ColorTabs {
+    justify-content: center;
+}
+
+#ColorTabs .nav-link {
+    font-size: 1.2em;
+    margin-top: 20px;
+}
+
+#ColorTabs .nav-link.active {
+    font-weight: bold;
+}
+
+.navbar-brand {
+    padding-left: 15px;
+}
+
+.navbar-nav ms-auto {
+    padding-right: 15px;
+}
+
+#inst {
+    display: block;
+    text-align: center;
+    margin-top: 50px;
+    font-size: 1.2em;
+    color: #555;
+}
+
+#img {
+    max-width: 40%;
+    height: auto;
+    border: 2px solid #ddd;
+    border-radius: 4px;
+    padding: 5px;
+    margin-right: 50px;
+}
+
+#img:hover {
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+#wheelContent {
+    gap: 30px;
+    display: flex; 
+    align-items: flex-start;
+    margin-bottom: 50px;
+}
+
+#instructions {
+    max-width: 70%;
+    transform: translateY(-50px)
+}
+
+.info {
+    font-size: 1.1em;
+}
+
+.info_1 {
+    font-size: 1.2em;
+}
+
+#save {
+    margin-top: 30px;
+}

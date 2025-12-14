@@ -1,0 +1,91 @@
+{% extends "layout.html" %}
+
+{% block title %}Color Wheel{% endblock %}
+
+{% block body %}
+    <div class="container mt-4">
+        <h1 class="mb-4">Color Wheel</h1>
+        <div class="d-flex justify-content-left" id="wheelContent">
+            <img src="static/color_wheel.jpg" alt="Color Wheel" id="img">     
+
+            <div id="instructions"">
+                <h3>How to Use the Color Wheel and Color Palettes</h3>
+                <p class="info_1">The color wheel is a visual representation of colors arranged according to their chromatic relationship. It is a useful tool for understanding color theory and creating harmonious color combinations.</p>
+
+                <h4>Complementary Palette</h4>
+                <ul class="info">
+                    <li>Effect: Creates a strong contrast and vibrant look.</li>
+                    <li>Use in real life: Great for highlighting important elements, like making a call-to-action button stand out, or combining clothing items for a bold statement.</li>
+                    <li>Tip: Use one color as dominant and the other sparingly to avoid visual overload.</li>
+                </ul>
+
+                <h4>Analogous Palette</h4>
+                <ul class="info">
+                    <li>Effect: Produces a harmonious and calming feel because the colors are next to each other on the color wheel.</li>
+                    <li>Use in real life: Ideal for outfits, interior design, or any project where you want a smooth, cohesive look.</li>
+                    <li>Tip: Choose one color as dominant, the next as secondary, and the third as an accent.</li>
+                </ul>
+                <h4>Triadic Palette</h4>
+                <ul class="info">
+                    <li>Effect: Balances vibrancy and harmony. Triadic colors are evenly spaced on the color wheel.</li>
+                    <li>Use in real life: Works well for colorful but balanced designs, like playful graphics, websites, or vibrant outfit combinations.</li>
+                    <li>Tip: Stick to one dominant color and use the others in smaller amounts to avoid clashing.</li>
+                </ul>
+                
+            </div>
+
+        </div>
+    </div>
+{% endblock %}   
+
+     <!-- Display color combinations for pick -->
+     <div class="row m t-4">
+          <div class="col-12">
+               <h4 class="match">Color Combinations: </h4>
+               <div class="d-flex align-items-center gap-3">
+                    {% for palette in palettes %}
+                         <div class="d-flex gap-1">
+                              <h5>{{ palette }}:</h5>
+                         {% for color in palettes[palette] %}
+                              <div style="width:100px; height:100px; background-color: {{ color }}; border:1px solid #000;"></div>
+                         {% endfor%}
+                         </div>
+                    {% endfor %}
+                    <form method="POST" action="/debug">
+                         <input type="hidden" name="action" value="save_palette">
+                         <input type="hidden" name="base_color" value="{{ extracted_color }}">
+                         <input type="hidden" name="complementary" value="{{ palettes['complementary'] }}">
+                         <input type="hidden" name="analogous" value="{{ palettes['analogous'] }}">
+                         <input type="hidden" name="triadic" value="{{ palettes['triadic'] }}">
+                         <input  autocomplete="off" type="text" name="palette_name" placeholder="Palette Name">
+                         <button type="submit" class="btn btn-success mt-2">Save Palette</button>
+                    </form>
+               </div>
+          </div>
+     </div>
+
+     <!-- Display Color Combinations for upload-->
+      <div class="row mt-4">
+          <div class="col-12">
+               <h4 class="match">Color Combinations: </h4>
+               {% if image_uploaded == True %}
+                    {% for palette in palettes %}
+                         <div id="combinations" class="d-flex flex-wrap gap-3">
+                              <h5>{{ palette }}:</h5>
+                         {% for color in palettes[palette] %}
+                              <div style="width:100px; height:100px; background-color: {{ color }}; border:1px solid #000;"></div>
+                         {% endfor%}
+                    {% endfor %}
+                    </div>
+                    <form method="POST" action="/debug">
+                         <input type="hidden" name="action" value="save_palette">
+                         <input type="hidden" name="base_color" value="{{ extracted_color }}">
+                         <input type="hidden" name="complementary" value="{{ palettes['complementary'] }}">
+                         <input type="hidden" name="analogous" value="{{ palettes['analogous'] }}">
+                         <input type="hidden" name="triadic" value="{{ palettes['triadic'] }}">
+                         <input autocomplete="off" type="text" name="palette_name" placeholder="Palette Name">
+                         <button type="submit" class="btn btn-success" id="save">Save Palette</button>
+                    </form> 
+               {% endif %}
+          </div>
+     </div>

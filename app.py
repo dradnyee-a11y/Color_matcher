@@ -181,21 +181,28 @@ def combos():
     user_id = session["user_id"]
     if request.method == "GET":
         palettes = db.execute("SELECT * FROM combos WHERE user_id = ?", user_id)
+        print("palettes:", palettes)
         return render_template("saved.html", palettes=palettes)
     
     elif request.method == "POST":
         action = request.form.get("action")
-        print("form:",request.form)
         name = request.form.get("palette_name")
         if not name:
             name = "Untitled Palette"
         
         if action == "save_palette":
             base_color = request.form.get("base_color")
+            print("base color:", base_color)
             complementary = request.form.get("complementary")
-            analogous = request.form.get("analogous")   
+            print("complementary:", complementary)
+            analogous = request.form.get("analogous")  
+            print("analogous:", analogous) 
             triadic = request.form.get("triadic")
+            print("triadic:", triadic)
 
+            if complementary == '':
+                return "no hex", 500
+            
             # Save the palette to the database
             db.execute("INSERT INTO combos (user_id, base_color, complementary, analogous, triadic, name) VALUES (?, ?, ?, ?, ?, ?)", 
                        user_id, base_color, complementary, analogous, triadic, name)
@@ -218,6 +225,7 @@ def color_matcher():
         if "image" in request.files and request.files.get("image"):
              
              image = request.files.get("image")
+             print("form:", request.form)
 
              # Ensure the user uploaded an image
              if not image:

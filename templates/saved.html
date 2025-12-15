@@ -13,13 +13,29 @@
             {% for palette in palettes %}
                 <div class="card mb-3">
                     <div class="card-body">
-                        <h5 class="card-title">Palette {{ loop.index }}</h5>
+                        <h5 class="card-title">{{ palette.name }}</h5>
                         <div class="d-flex align-items-center gap-2">
                             <h6>Base Color:</h6>
-                            <div style="width:100px; height:100px; background-color: {{ palette.base_color }}; border:1px solid #000;"></div>
+                            <h7>{{ palette.base_color}}</h7>
+                            <span class="box" style="background-color: {{ palette.base_color }};"></span>
+
+                            <h6>Complementary:</h6>
+                            <h7>{{ palette.complementary[2:-2 ]}}</h7>
+                            <span class="box" style="background-color: {{ palette.complementary[2:-2] }};"></span>
+
+                            <h6>Analogous:</h6>
+                            <h7>{{ palette.analogous[2:9] }} , {{ palette.analogous[13:-2] }}</h7>
+                            <span class="box" style="background-color: {{ palette.analogous[2:9] }};"></span>
+                            <span class="box" style="background-color: {{ palette.analogous[13:-2] }};"></span>
+
+                            <h6>Analogous:</h6>
+                            <h7>{{ palette.triadic[2:9] }} , {{ palette.triadic[13:-2]}} </h7>
+                            <span class="box" style="background-color: {{ palette.triadic[2:9] }};"></span>
+                            <span class="box" style="background-color: {{ palette.triadic[13:-2] }};"></span>
                         </div>
                     </div>
                 </div>
+                    
             {% endfor %}
         {% endif %}
      </div>

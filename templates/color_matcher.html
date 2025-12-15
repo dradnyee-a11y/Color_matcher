@@ -29,7 +29,7 @@
                               </div>
                          </div>
                          <div class="row mt-4">
-                              <div class="col-12">
+                              <div class="col-12" id="pale">
                                    <h4 class="match">Color Combinations: </h4>
                                    <div class="d-flex align-items-center gap-3">
                                         {% for palette in palettes %}
@@ -40,15 +40,6 @@
                                              {% endfor%}
                                              </div>
                                         {% endfor %}
-                                        <form method="POST" action="/debug">
-                                             <input type="hidden" name="action" value="save_palette">
-                                             <input type="hidden" name="base_color" value="{{ extracted_color }}">
-                                             <input type="hidden" name="complementary" value="{{ palettes['complementary'] }}">
-                                             <input type="hidden" name="analogous" value="{{ palettes['analogous'] }}">
-                                             <input type="hidden" name="triadic" value="{{ palettes['triadic'] }}">
-                                             <input  autocomplete="off" type="text" name="palette_name" placeholder="Palette Name">
-                                             <button type="submit" class="btn btn-success mt-2">Save Palette</button>
-                                        </form>
                                    </div>
                               </div>
                          </div>
@@ -69,7 +60,7 @@
                               </div>
                          </div>
                          <div class="row mt-4">
-                              <div class="col-12">
+                              <div class="col-12" id="pal">
                                    <h4 class="match">Color Combinations: </h4>
                                    {% if image_uploaded == True %}
                                         {% for palette in palettes %}
@@ -79,16 +70,7 @@
                                                   <div style="width:100px; height:100px; background-color: {{ color }}; border:1px solid #000;"></div>
                                              {% endfor%}
                                         {% endfor %}
-                                        </div>
-                                        <form method="POST" action="/debug">
-                                             <input type="hidden" name="action" value="save_palette">
-                                             <input type="hidden" name="base_color" value="{{ extracted_color }}">
-                                             <input type="hidden" name="complementary" value="{{ palettes['complementary'] }}">
-                                             <input type="hidden" name="analogous" value="{{ palettes['analogous'] }}">
-                                             <input type="hidden" name="triadic" value="{{ palettes['triadic'] }}">
-                                             <input autocomplete="off" type="text" name="palette_name" placeholder="Palette Name">
-                                             <button type="submit" class="btn btn-success" id="save">Save Palette</button>
-                                        </form> 
+                                             </div>
                                    {% endif %}
                               </div>
                          </div>
@@ -96,6 +78,20 @@
                </div>
           </div>
      </form>
+     <div class="container mt-n3">
+          {% if palettes %}
+               <pre>{{ palettes }}</pre>
+               <form method="POST" action="/combos" class="form">
+                    <input type="hidden" name="action" value="save_palette">
+                    <input type="hidden" name="base_color" value="{{ extracted_color }}">
+                    <input type="hidden" name="complementary" value="{{ palettes['Complementary'] }}">
+                    <input type="hidden" name="analogous" value="{{ palettes['Analogous'] }}">
+                    <input type="hidden" name="triadic" value="{{ palettes.Triadic }}">
+                    <input autocomplete="off" type="text" name="palette_name" placeholder="Palette Name">
+                    <button type="submit" class="btn btn-success" id="save">Save Palette</button>
+               </form> 
+          {% endif %}
+     </div>
 
      
 

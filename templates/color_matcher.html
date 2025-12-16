@@ -15,28 +15,36 @@
      <form method="POST" action="/color_matcher" enctype="multipart/form-data">
           <div class="tab-content" id="TabContent">
                <!-- Pick a color tab content -->
-               <div class="tab-pane fade show {% if tab == 'pick' %} show active {% endif %}" id="pick" role="tabpanel" aria-labelledby="pick-tab">
-                    <div class="container mt-4">
-                         <div class="row">
-                              <div class="col-md-6">
-                                   <h4>Select a Color</h4>
-                                   <input type="color" id="colorPicker" name="color" class="form-control form-control-color" value= {{ color }}>
-                                   <button type="submit" class="btn btn-primary mt-3">Find Combinations</button>
+               <div class="tab-pane fade {% if tab == 'pick' %}show active{% endif %}" id="pick" role="tabpanel" aria-labelledby="pick-tab">
+                    <div class="container mt-5">
+                         <div class="row align-items-center justify-content-center g-4">
+
+                              <div class="col-md-3 text-center">
+                                   <h4 class="mb-3">Pick a color <br>🡇</h4>
+                                   <input type="color" id="colorPicker" name="color" class="form-control form-control-color mx-auto" value="{{ color or '#000000' }}" style="width:80px; height:80px;">
+                                   <button type="submit" class="btn btn-primary mt-3">
+                                        Find Combinations
+                                   </button>
                               </div>
-                              <div class="col-md-6">
-                                   <h4>Selected Color</h4>
-                                   <div id="selectedColor" style="width:100%; height:100px; background-color: {% if color %}{{ color }}{% else %} #ffffff {% endif %};; border:1px solid #000;"></div>
+
+                              <div class="col-md-3 text-center">
+                                   <h4 class="mb-3">Selected color</h4>
+                                   <div class="rounded shadow-sm mx-auto"  id="selectedColor" style="width:200px; height:200px; background-color: {{ color or '#ffffff' }}; border:1px solid #ffffff;"></div>
+
+                                   {% if color %}
+                                   <p class="mt-2 text-muted">{{ color }}</p>
+                                   {% endif %}
                               </div>
-                         </div>
-                         <div class="row mt-4">
-                              <div class="col-12" id="pale">
-                                   <h4 class="match">Color Combinations: </h4>
-                                   <div class="d-flex align-items-center gap-3">
+
+                             
+                              <div class="col-md-5 text-center justify-content-center ms-5" id="pale">
+                                   <h4 class="match text-center" id="com">Color Combinations: </h4>
+                                   <div class="d-flex flex-wrap align-items-start gap-3">
                                         {% for palette in palettes %}
-                                             <div class="d-flex gap-1">
-                                                  <h5>{{ palette }}:</h5>
+                                             <div class="d-flex col-auto flex-column gap-2">
+                                                  <h5>{{ palette }}</h5>
                                              {% for color in palettes[palette] %}
-                                                  <div style="width:100px; height:100px; background-color: {{ color }}; border:1px solid #000;"></div>
+                                                  <div class="rounded shadow-sm mx-auto" style="width:100px; height:100px; background-color: {{ color }}; border:1px solid #ffffff;"></div>
                                              {% endfor%}
                                              </div>
                                         {% endfor %}
@@ -44,33 +52,41 @@
                               </div>
                          </div>
                     </div>
-               </div>
+               </div> 
                <!-- Upload an image tab content -->
                <div class="tab-pane fade {% if tab == 'upload'%} show active {% endif %}" id="upload" role="tabpanel" aria-labelledby="upload-tab">
                     <div class="container mt-4">
-                         <div class="row">
-                              <div class="col-md-6">
-                                   <h4>Upload an Image</h4>
-                                   <input type="file" id="imageUpload" name="image" accept="image/*" class="form-control">
+                         <div class="row align-items-center justify-content-center g-4">
+
+                              <div class="col-md-3 text-center align-items-center">
+                                   <h4 class="mb-3">Upload an Image</h4>
+                                   <input type="file" id="imageUpload" name="image" accept="image/*" class="form-control w-200 mx-auto my-3">
                                    <button type="submit" class="btn btn-primary mt-3">Extract Color & Find Combinations</button>
                               </div>
-                              <div class="col-md-6">
-                                   <h4>Extracted Color</h4>
-                                   <div id="extractedColor" style="width:100%; height:100px; background-color: {% if image_uploaded == True %} {{ extracted_color }} {% else %} '#ffffff' {% endif %}; border:1px solid #000;"></div>
+
+                              <div class="col-md-3 text-center mt-5">
+                                   <h4 class="my-3">Extracted Color</h4>
+                                   <div class="rounded shadow-sm mx-auto" id="extractedColor" style="width:200px; height:200px; background-color: {% if image_uploaded == True %} {{ extracted_color }} {% else %} '#ffffff' {% endif %}; border:1px solid #fff;"></div>
+
+                                   {% if extracted_color %}
+                                        <p class="mt-2 text-muted">{{ extracted_color }}</p>
+                                   {% endif %}
                               </div>
-                         </div>
-                         <div class="row mt-4">
-                              <div class="col-12" id="pal">
-                                   <h4 class="match">Color Combinations: </h4>
+                         
+
+                              <div class="col-5 text-center justify-content-center ms-5 mt-5" id="pal">
+                                   <h4 class="match text-center" id="up">Color Combinations: </h4>
                                    {% if image_uploaded == True %}
-                                        {% for palette in palettes %}
-                                             <div id="combinations" class="d-flex flex-wrap gap-3">
-                                                  <h5>{{ palette }}:</h5>
-                                             {% for color in palettes[palette] %}
-                                                  <div style="width:100px; height:100px; background-color: {{ color }}; border:1px solid #000;"></div>
-                                             {% endfor%}
-                                        {% endfor %}
-                                             </div>
+                                        <div class="d-flex flex-wrap align-items-start gap-3">
+                                             {% for palette in palettes %}
+                                                  <div id="combinations" class="d-flex col-auto flex-column gap-2">
+                                                       <h5>{{ palette }}:</h5>
+                                                  {% for color in palettes[palette] %}
+                                                       <div class="rounded shadow-sm mx-auto" style="width:100px; height:100px; background-color: {{ color }}; border:1px solid #fff;"></div>
+                                                  {% endfor%}
+                                                  </div>
+                                             {% endfor %}
+                                        </div>
                                    {% endif %}
                               </div>
                          </div>
@@ -80,24 +96,17 @@
      </form>
      <div class="container mt-n3">
           {% if palettes %}
-               <pre>{{ palettes }}</pre>
                <form method="POST" action="/combos" class="form">
                     <input type="hidden" name="action" value="save_palette">
                     <input type="hidden" name="base_color" value="{{ extracted_color }}">
                     <input type="hidden" name="complementary" value="{{ palettes['Complementary'] }}">
                     <input type="hidden" name="analogous" value="{{ palettes['Analogous'] }}">
                     <input type="hidden" name="triadic" value="{{ palettes.Triadic }}">
-                    <input autocomplete="off" type="text" name="palette_name" placeholder="Palette Name">
-                    <button type="submit" class="btn btn-success" id="save">Save Palette</button>
+                    <input autocomplete="off" type="text" name="palette_name" id="save" placeholder="Palette Name">
+                    <button type="submit" class="btn btn-success">Save Palette</button>
                </form> 
           {% endif %}
      </div>
 
-     
-
-
-    
-     
-
-     <span id="inst">Wondering how to use them? Check out the <a href="/wheel">color wheel!</a></span>
+     <div id="inst">Wondering how to use them? Check out the <a href="/wheel">color wheel!</a></span>
 {% endblock %}

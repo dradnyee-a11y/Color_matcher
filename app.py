@@ -1,5 +1,7 @@
 import os
+
 import colorsys
+import re
 from flask import Flask, render_template, request, redirect, session, flash
 from cs50 import SQL
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -7,12 +9,9 @@ from flask_session import Session
 from functools import wraps
 from PIL import Image, ImageColor
 
+
 # Creat web application
 app = Flask(__name__)
-
-# Ensure the app runs on main
-if __name__ == "__main__":
-    app.run()
     
 # Configure app to clear cookies after browser is closed
 app.config["SESSION_PERMANENT"] = False
@@ -23,6 +22,12 @@ Session(app)
 
 # Configure the SQLite database
 db = SQL("sqlite:///outfits.db")
+
+app.secret_key = "cs50-secret-key"
+
+# Ensure the app runs on main
+if __name__ == "__main__":
+    app.run()
 
 # Helper functions
 def get_dominant_color(image):
@@ -41,7 +46,7 @@ def get_dominant_color(image):
     # Return the dominant color
     return dominant_color
 
-def hex(rgb):
+def hex_simple(rgb):
     return '#%02x%02x%02x' % rgb
 
 def rgb_to_hex(rgb):
@@ -94,6 +99,10 @@ def login_required(f):
     # return the decorated function
     return decorated_function
 
+EXTENSIONS = {"png", "jpg", "jpeg"}
+def file_validity(file):
+    return "." in file and file.rsplit(".", 1)[1].lower() in EXTENSIONS
+
 @app.route("/", methods=["GET"])
 def index():
     if request.method == "GET":
@@ -110,6 +119,15 @@ def register():
         username = request.form.get("username")
         password = request.form.get("password")
         confirm_password = request.form.get("confirm_password")
+        
+        if not username or not password or not confirm_password:
+            return "Please fill out all fields", 400
+        
+        if len(username) > 30:
+            return "Username too long", 400
+        
+        if len(password) < 6:
+            return "Password too short", 400
         
         # Check if the paswswords match
         if password != confirm_password:
@@ -138,9 +156,6 @@ def login():
         username = request.form.get("username")
         password = request.form.get("password")
         user = db.execute("SELECT * FROM users WHERE username = ?", username)
-        print(user)
-        if user is None:
-            return "list empty", 400
         
         # Ensure the user entered credentials 
         if not username or not password:
@@ -158,22 +173,17 @@ def login():
         session["username"] = user[0]["username"]
     return redirect("/")
 
-@app.route("/logout")
+@app.route("/logout", methods=["POST"])
+@login_required
 def logout():
-    # Log the user out by clearing the session
-    session.clear()
-    return redirect("/login")
+    if request.method == "POST":
+        # Log the user out by clearing the session
+        session.clear()
+        return redirect("/login")
 
 @app.route("/wheel")
 def wheel():
     return render_template("wheel.html")
-
-@app.route("/debug", methods=["POST"])
-def debug():
-    if request.method == "POST":
-        print("FORM DATA:", request.form)
-        return "Received"
-    return render_template("saved.html")
 
 @app.route("/combos", methods=["GET", "POST"])
 @login_required
@@ -181,7 +191,6 @@ def combos():
     user_id = session["user_id"]
     if request.method == "GET":
         palettes = db.execute("SELECT * FROM combos WHERE user_id = ?", user_id)
-        print("palettes:", palettes)
         return render_template("saved.html", palettes=palettes)
     
     elif request.method == "POST":
@@ -192,22 +201,17 @@ def combos():
         
         if action == "save_palette":
             base_color = request.form.get("base_color")
-            print("base color:", base_color)
             complementary = request.form.get("complementary")
-            print("complementary:", complementary)
             analogous = request.form.get("analogous")  
-            print("analogous:", analogous) 
             triadic = request.form.get("triadic")
-            print("triadic:", triadic)
-
-            if complementary == '':
-                return "no hex", 500
+            
+            if not base_color or not complementary or not analogous or not triadic:
+                return "Invalid Palette", 400
             
             # Save the palette to the database
             db.execute("INSERT INTO combos (user_id, base_color, complementary, analogous, triadic, name) VALUES (?, ?, ?, ?, ?, ?)", 
                        user_id, base_color, complementary, analogous, triadic, name)
 
-            flash ("Palette saved!", "success")
             return redirect("/combos")
 
 @app.route("/color_matcher", methods=["GET", "POST"])
@@ -225,15 +229,17 @@ def color_matcher():
         if "image" in request.files and request.files.get("image"):
              
              image = request.files.get("image")
-             print("form:", request.form)
 
              # Ensure the user uploaded an image
-             if not image:
+             if not image or image.filename == "":
                 return "No image uploaded", 400
+             
+             if not file_validity(image.filename):
+                return "Invalid file type", 400
              
              # Get the dominant color from the image
              dominant_color = get_dominant_color(image)
-             hex_color = hex(dominant_color)
+             hex_color = hex_simple(dominant_color)
 
             # Ensure a color was extracted
              if hex_color is None:
@@ -248,6 +254,9 @@ def color_matcher():
             color = request.form.get("color")
             hex_color = color
 
+            if not re.match(r"^#[0-9A-Fa-f]{6}$", hex_color):
+                return "Invalid Color", 400
+            
             # Ensure the user picked a color
             if hex_color is None:
                 return "No color selected", 400
@@ -257,20 +266,11 @@ def color_matcher():
         
         # Convert hex to RGB to convert it to HSL
         rgb = ImageColor.getrgb(hex_color)
-        print("Hex:", hex_color)
-        print ("RGB:", rgb)
         hls = colorsys.rgb_to_hls(rgb[0]/255, rgb[1]/255, rgb[2]/255)
-        print ("HLS:", hls)
 
         # Generate color palettes
         palettes["Complementary"] = [complementary(hls)]
-        print ("Complementary:",palettes["Complementary"])
         palettes["Analogous"] = analogous(hls)
-        print ("Analogous:",palettes["Analogous"])
         palettes["Triadic"] = triadic(hls)
-        print ("Triadic:",palettes["Triadic"])
-
-        if palettes is None:
-            return "Could not generate color palettes", 400
 
     return render_template("color_matcher.html", extracted_color=hex_color, tab=tab, palettes=palettes, color=color, image_uploaded=image_uploaded)

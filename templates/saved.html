@@ -4,40 +4,71 @@
 
 {% block body %}
      <div>
-        <h2>Saved Palettes</h2>
-     </div>
-     <div>
-        {% if palettes|length == 0 %}
-            <p>No palettes saved yet.</p>
-        {% else %}
+        <h2 class="ms-4 my-3">Saved Palettes</h2>
+    </div>
+
+    {% if palettes|length == 0 %}
+        <p>No palettes saved yet.</p>
+    {% else %}
+        <div class="row">
             {% for palette in palettes %}
-                <div class="card mb-3">
+            <div class="col-md-6 col-lg-3">
+                <div class="card mb-3 shadow-sm ms-4">
                     <div class="card-body">
-                        <h5 class="card-title">{{ palette.name }}</h5>
-                        <div class="d-flex align-items-center gap-2">
-                            <h6>Base Color:</h6>
-                            <h7>{{ palette.base_color}}</h7>
-                            <span class="box" style="background-color: {{ palette.base_color }};"></span>
-
-                            <h6>Complementary:</h6>
-                            <h7>{{ palette.complementary[2:-2 ]}}</h7>
-                            <span class="box" style="background-color: {{ palette.complementary[2:-2] }};"></span>
-
-                            <h6>Analogous:</h6>
-                            <h7>{{ palette.analogous[2:9] }} , {{ palette.analogous[13:-2] }}</h7>
-                            <span class="box" style="background-color: {{ palette.analogous[2:9] }};"></span>
-                            <span class="box" style="background-color: {{ palette.analogous[13:-2] }};"></span>
-
-                            <h6>Analogous:</h6>
-                            <h7>{{ palette.triadic[2:9] }} , {{ palette.triadic[13:-2]}} </h7>
-                            <span class="box" style="background-color: {{ palette.triadic[2:9] }};"></span>
-                            <span class="box" style="background-color: {{ palette.triadic[13:-2] }};"></span>
+                        <h4 class="card-title text-center mb-2">{{ palette.name }}</h4>
+                        
+                        <!-- Base Color -->
+                        <div class="d-flex flex-column align-items-start mb-2">
+                            <h6>Base Color</h6>
+                            <div class="d-flex align-items-center gap-2">
+                                <div class="box" style="background-color: {{ palette.base_color }};">
+                                    <span>{{ palette.base_color }}</span>
+                                </div>
+                            </div>
                         </div>
+
+                        <!-- Complementary -->
+                        <div class="d-flex flex-column align-items-start mb-2">
+                            <h6>Complementary</h6>
+                            <div class="d-flex align-items-center gap-2">
+                                <div class="box" style="background-color: {{ palette.complementary[2:-2] }};">
+                                    <span>{{ palette.complementary[2:-2] }}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Analogous -->
+                        <div class="d-flex flex-column align-items-start mb-2">
+                            <h6>Analogous</h6>
+                            <div class="d-flex align-items-center gap-2">
+                                <div class="box" style="background-color: {{ palette.analogous[2:9] }};">
+                                    <span>{{ palette.analogous[2:9] }}</span>
+                                </div>
+                                <div class="box" style="background-color: {{ palette.analogous[13:-2] }};">
+                                    <span>{{ palette.analogous[13:-2] }}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Triadic -->
+                        <div class="d-flex flex-column align-items-start mb-2">
+                            <h6>Triadic</h6>
+                            <div class="d-flex align-items-center gap-2">
+                                <div class="box" style="background-color: {{ palette.triadic[2:9] }};">
+                                    <span>{{ palette.triadic[2:9] }}</span>
+                                </div>
+                                <div class="box" style="background-color: {{ palette.triadic[13:-2] }};">
+                                    <span>{{ palette.triadic[13:-2] }}</span>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
-                    
+            </div>
             {% endfor %}
-        {% endif %}
-     </div>
+        </div>
+    {% endif %}
+
         
 {% endblock %}

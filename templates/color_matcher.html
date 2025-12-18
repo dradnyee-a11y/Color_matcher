@@ -21,7 +21,7 @@
 
                               <div class="col-md-3 text-center">
                                    <h4 class="mb-3">Pick a color <br>🡇</h4>
-                                   <input type="color" id="colorPicker" name="color" class="form-control form-control-color mx-auto" value="{{ color or '#000000' }}" style="width:80px; height:80px;">
+                                   <input type="color" id="colorPicker" name="color" class="form-control form-control-color mx-auto" value="{{ color or '#000000' }}">
                                    <button type="submit" class="btn btn-primary mt-3">
                                         Find Combinations
                                    </button>
@@ -29,7 +29,7 @@
 
                               <div class="col-md-3 text-center">
                                    <h4 class="mb-3">Selected color</h4>
-                                   <div class="rounded shadow-sm mx-auto"  id="selectedColor" style="width:200px; height:200px; background-color: {{ color or '#ffffff' }}; border:1px solid #ffffff;"></div>
+                                   <div class="rounded shadow-sm mx-auto"  id="selectedColor" style="background-color: {{ color or '#ffffff' }};"></div>
 
                                    {% if color %}
                                    <p class="mt-2 text-muted">{{ color }}</p>
@@ -44,7 +44,7 @@
                                              <div class="d-flex col-auto flex-column gap-2">
                                                   <h5>{{ palette }}</h5>
                                              {% for color in palettes[palette] %}
-                                                  <div class="rounded shadow-sm mx-auto" style="width:100px; height:100px; background-color: {{ color }}; border:1px solid #ffffff;"></div>
+                                                  <div class="rounded shadow-sm mx-auto" id="colorPalette" style=" background-color: {{ color }};"></div>
                                              {% endfor%}
                                              </div>
                                         {% endfor %}
@@ -66,7 +66,7 @@
 
                               <div class="col-md-3 text-center mt-5">
                                    <h4 class="my-3">Extracted Color</h4>
-                                   <div class="rounded shadow-sm mx-auto" id="extractedColor" style="width:200px; height:200px; background-color: {% if image_uploaded == True %} {{ extracted_color }} {% else %} '#ffffff' {% endif %}; border:1px solid #fff;"></div>
+                                   <div class="rounded shadow-sm mx-auto" id="extractedColor" style="background-color: {% if image_uploaded == True %} {{ extracted_color }} {% else %} '#ffffff' {% endif %};"></div>
 
                                    {% if extracted_color %}
                                         <p class="mt-2 text-muted">{{ extracted_color }}</p>
@@ -82,7 +82,7 @@
                                                   <div id="combinations" class="d-flex col-auto flex-column gap-2">
                                                        <h5>{{ palette }}:</h5>
                                                   {% for color in palettes[palette] %}
-                                                       <div class="rounded shadow-sm mx-auto" style="width:100px; height:100px; background-color: {{ color }}; border:1px solid #fff;"></div>
+                                                       <div class="rounded shadow-sm mx-auto" id="palette" style="background-color: {{ color }};"></div>
                                                   {% endfor%}
                                                   </div>
                                              {% endfor %}

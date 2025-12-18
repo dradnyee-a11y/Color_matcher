@@ -1,13 +1,14 @@
 # Color Combination Finder
-### Video Demo:  <URL HERE>
+### Video Demo:  [Color Combination Finder](https://youtu.be/ywLrbxHuDoM)
+
 ### Description:
 #### Overview of project
-Color combination Finder is a web application that generates complementary, analogous and triadic palettes for a chosen color. The user can either select a color (or enter RGB values) or upload an image from which the app extracts the dominant color, generates and displays palettes. The app reduces struggle of manually finding color palettes, making it easy to find colors that go well.\
+Color combination Finder is a web application that generates complementary, analogous and triadic palettes for a chosen color. The user can either select a color (or enter RGB values) or upload an image from which the app extracts the dominant color, generates and displays palettes. The app reduces struggle of manually finding color palettes, making it easy to find colors that go well. The application can be used to discover palettes that can be used for clothing, interior designing, home decor and web designing. 
 The app offers the following features: users can login, register, save and view palettes (only if logged in) and use the navbar to easily navigate across the website.
 
 
 #### User Interface 
-The user reaches the home page by the default route after opening the app. At the top is a navbar that contains the links to homepage, generating palette, saved palettes(My palettes) and color wheel which provides minimal information about the use of palettes; as well as login, register and if already logged in, logout.
+The user reaches the home page by the default route after opening the app. At the top is a navbar that contains the links to homepage, generating palette page, saved palettes(My palettes) page and color wheel page which provides minimal information about the uses of palettes; as well as login, register and if already logged in, logout.
 
 The homepage displays the title and brief introduction. The user can click the get started button which redirects to generate palettes page
 
@@ -15,10 +16,10 @@ The generate Palettes page has two tabs: Pick A Color and Upload An Image. The P
 
 The color wheel page features a picture of a color wheel and basic information about the use of the palettes. It can be accessed by clicking the link on the navbar as well as by clicking the link on generate palettes page. 
 
-If the user chooses to save the palette, they are redirected to My palettes after logging in if not done before. Otherwise, the user can anytime visit the page by clicking on My palettes link on the navbar. All of the user's saved palettes are displayed here along with hex color codes and the submitted title (if any) by the user. 
+If the user chooses to save the palette, they are redirected to My palettes page after logging in if not done before. Otherwise, the user can anytime visit the page by clicking on My palettes link on the navbar. All of the user's saved palettes are displayed here along with hex color codes and the submitted title (if any) by the user. 
 
 #### app.py (Controller)
-This is the main flask application which controls routes, user authentication, processing user input, sessions and data from the database. As the backend of the application, it checks for errors against malicious input and validates user input. The logic for extracting dominant color from images, calculating hex values for color palettes and saving palettes is in this file. It is  the medium through which data is retrieved from and entered into the database, connecting the database and templates.
+This is the main flask application which controls routes, user authentication, processing user input, sessions and data from the database. As the backend of the application, it checks for errors against malicious input and validates user input. The logic for extracting dominant color from images, calculating hex values for color palettes and saving palettes is in this file. It is the medium through which data is retrieved from and entered into the database, connecting the database and templates.
 
 #### /templates (View)
 Templates directory contains the HTML used for the application. layout.html contains the content for common features like navbar and footer and uses the body from templates. index.html displays the homepage.color_matcher.html displays the Generate palettes page. It displays the two tabs and when submitted via POST, it renders palettes using the data passed by app.py. saved.html displays saved palettes, displaying the saved palettes using the data from backend. wheel.html displays the color wheel page and login.html and register.html display login and register pages respectively. As the templates use jinja, the data is dynamically displayed. 

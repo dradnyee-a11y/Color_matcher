@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="static/style.css">
     <title>Outfit Color Matcher: {% block title %}{% endblock %}</title>
 </head>
-<body>
+<body classs="d-flex flex-column min-vh-100">
     <header>
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <a class="navbar-brand" href="/">Color Combination Finder</a>
@@ -41,15 +41,15 @@
                         <li class="nav-item">
                             <a class="btn btn-outline-primary me-2" href="/login">Login</a>
                         </li>
-                    <li class="nav-item">
-                        <a class="btn btn-primary me-3" id="register" href="/register">Register</a>
-                    </li>
+                        <li class="nav-item">
+                            <a class="btn btn-primary me-3" href="/register">Register</a>
+                        </li>
                     {% endif %}
                 </ul>
             </div>
         </nav>
     </header>
-    <main class="content">
+    <main class=" flex feel content">
         {% block body %}
         {% endblock %}
     </main>

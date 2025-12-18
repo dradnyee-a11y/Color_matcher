@@ -9,7 +9,6 @@ from flask_session import Session
 from functools import wraps
 from PIL import Image, ImageColor
 
-
 # Creat web application
 app = Flask(__name__)
     

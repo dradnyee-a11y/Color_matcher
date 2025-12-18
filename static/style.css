@@ -2,29 +2,13 @@ body, head, footer {
     background-color: #f8f9fa !important;
 }
 
-body {
-    min-height: 100vh;
-    overflow-y: auto;
+body {  
+    margin: 0;
+    overflow-x: hidden
 }
 
 .content {
-    margin-bottom: 80px;
-}
-.match {
-    margin-bottom: 20px;
-}
-
-#ColorTabs {
-    justify-content: center;
-}
-
-#ColorTabs .nav-link {
-    font-size: 1.2em;
-    margin-top: 20px;
-}
-
-#ColorTabs .nav-link.active {
-    font-weight: bold;
+    padding-bottom: 80px;
 }
 
 .navbar-brand {
@@ -35,24 +19,20 @@ body {
     padding-right: 15px;
 }
 
-#card, card_r{
-    min-height:70vh
+#card {
+    min-height: 70vh;
 }
+
+#card_r {
+    min-height: 70vh;
+}
+
 #register {
     max-width:480px; width:100%
 }
 
 #login {
     max-width:420px; width:100%
-}
-
-#inst {
-    display: block;
-    text-align: center;
-    margin-top: 50px;
-    font-size: 1.2em;
-    color: #555;
-    clear: both;
 }
 
 #img {
@@ -95,14 +75,6 @@ body {
     float: right;
 }
 
-#save {
-    border-radius: 12px;
-    height: 38px;
-    padding: 10px;
-    margin-top: 10px;
-    margin-bottom: 0px;
-}
-
 .box {
     width: 120px;
     max-width: 120px; 
@@ -126,14 +98,71 @@ body {
     margin-right: 0 !important;
 }
 
-#com {
-    padding-right: 140px;
-}
-
 #top {
     margin-top: 100px;
 }
 
+#ColorTabs {
+    justify-content: center;
+}
+
+#ColorTabs .nav-link.active {
+    font-weight: bold;
+}
+
+#ColorTabs .nav-link {
+    font-size: 1.2em;
+    margin-top: 20px;
+}
+
+.match {
+    margin-bottom: 20px;
+}
+
+#com {
+    padding-right: 140px;
+}
+
 #up {
     padding-right: 140px;
+}
+
+#colorPicker {
+    width:80px; 
+    height:80px;
+}
+
+#selectedColor, #extractedColor {
+    width:200px; 
+    height:200px;
+    border:1px solid #ffffff;
+}
+
+
+#colorPalette {
+    width:100px; 
+    height:100px;
+}
+
+#save {
+    border-radius: 12px;
+    height: 38px;
+    padding: 10px;
+    margin-top: 10px;
+    margin-bottom: 0px;
+}
+
+#inst {
+    display: block;
+    text-align: center;
+    margin-top: 50px;
+    font-size: 1.2em;
+    color: #555;
+    clear: both;
+}
+
+#palette {
+    width:100px; 
+    height:100px;
+    border:1px solid #ffffff;
 }

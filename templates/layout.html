@@ -11,17 +11,17 @@
 <body>
     <header>
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <a class="navbar-brand" href="/">Outfit Color Combination</a>
+            <a class="navbar-brand" href="/">Color Combination Finder</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a class="nav-link" href="/color_matcher">Color Matcher</a>
+                        <a class="nav-link" href="/color_matcher">Generate Palette</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/combos">My Combinations</a>
+                        <a class="nav-link" href="/my_palettes">My Palettes</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/wheel">Color Wheel</a> 
@@ -49,18 +49,17 @@
             </div>
         </nav>
     </header>
-    <main>
+    <main class="content">
         {% block body %}
         {% endblock %}
     </main>
-    <footer>
+    <footer class="footer">
         <nav class="navbar fixed-bottom bg-body-tertiary">
             <div class="container-fluid d-flex">
-                <span class="navbar-text">&copy; Outfit Color Combination Finder, 2025</span>
-                <span class="navbar-text ms-auto">Discover how <a href="https://www.figma.com/resource-library/what-is-color-theory/">Color Theory</a> works</span>
+                <span class="navbar-brand">&copy; Outfit Color Combination Finder, 2025</span>
+                <span class="navbar-brand ms-auto">Discover how <a href="https://www.figma.com/resource-library/what-is-color-theory/">Color Theory</a> works</span>
             </div>
-        </nav>
+        </nav> 
     </footer>
-    <script src="static/main.js"></script>
 </body>
 </html>

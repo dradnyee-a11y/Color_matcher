@@ -1,6 +1,6 @@
 {% extends "layout.html" %}
  
-{% block title %}Combination Finder{% endblock %}
+{% block title %}Genetate palettes{% endblock %}
 
 {% block body %}
      <ul class="nav nav-tabs" id="ColorTabs" role="tablist">
@@ -58,7 +58,7 @@
                     <div class="container mt-4">
                          <div class="row align-items-center justify-content-center g-4">
 
-                              <div class="col-md-3 text-center align-items-center">
+                              <div class="col-md-3 text-center align-items-center me-5">
                                    <h4 class="mb-3">Upload an Image</h4>
                                    <input type="file" id="imageUpload" name="image" accept="image/*" class="form-control w-200 mx-auto my-3">
                                    <button type="submit" class="btn btn-primary mt-3">Extract Color & Find Combinations</button>
@@ -96,7 +96,7 @@
      </form>
      <div class="container mt-n3">
           {% if palettes %}
-               <form method="POST" action="/combos" class="form">
+               <form method="POST" action="/my_palettes" class="form">
                     <input type="hidden" name="action" value="save_palette">
                     <input type="hidden" name="base_color" value="{{ extracted_color }}">
                     <input type="hidden" name="complementary" value="{{ palettes['Complementary'] }}">

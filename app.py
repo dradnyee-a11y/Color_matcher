@@ -2,7 +2,7 @@ import os
 
 import colorsys
 import re
-from flask import Flask, render_template, request, redirect, session, flash
+from flask import Flask, render_template, request, redirect, session
 from cs50 import SQL
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_session import Session
@@ -21,28 +21,21 @@ app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
 # Configure the SQLite database
-db = SQL("sqlite:///outfits.db")
+db = SQL("sqlite:///palettes.db")
 
+# Secret key
 app.secret_key = "cs50-secret-key"
-
-# Ensure the app runs on main
-if __name__ == "__main__":
-    app.run()
 
 # Helper functions
 def get_dominant_color(image):
     # Open the image
     image = Image.open(image)
-
     # Reduce the image size for faster processing
     image = image.resize((150, 150))
-
     # Convert image to palette and get a single color
     result = image.convert("P", palette=Image.ADAPTIVE, colors=1)
-
     # Convert the color to RGB format
     dominant_color = tuple(result.getpalette()[:3])
-
     # Return the dominant color
     return dominant_color
 
@@ -84,19 +77,12 @@ def triadic(hls):
     return ([c1 , c2])
 
 def login_required(f):
-    # Get data from the function passed in
     @wraps(f)
-
     def decorated_function(*args, **kwargs):
-        # If the user is not logged in, redirect to login page
         if session.get("user_id") is None:
             return redirect("/login")
-        
-        # Otherwise, proceed with the original function
         else:
             return f(*args, **kwargs)
-    
-    # return the decorated function
     return decorated_function
 
 EXTENSIONS = {"png", "jpg", "jpeg"}
@@ -110,22 +96,23 @@ def index():
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
-    # If reached via GET, show the form
     if request.method == "GET":
         return render_template("register.html")
     
-    # If reached via POST
     elif request.method == "POST":
         username = request.form.get("username")
         password = request.form.get("password")
         confirm_password = request.form.get("confirm_password")
         
+        # Ensure all the fields are filled
         if not username or not password or not confirm_password:
             return "Please fill out all fields", 400
         
+        # Ensure the username is not too long
         if len(username) > 30:
             return "Username too long", 400
         
+        # Ensure the password is not too short
         if len(password) < 6:
             return "Password too short", 400
         
@@ -133,6 +120,7 @@ def register():
         if password != confirm_password:
             return "Passwords do not match", 400
         
+        # Hash password
         password = generate_password_hash(password)
         
         # Check for duplicate usernames
@@ -146,11 +134,9 @@ def register():
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
-    # If reached via GET, show the form
     if request.method == "GET":
         return render_template("login.html")
     
-    # If reached via POST
     elif request.method == "POST":
         session.clear()
         username = request.form.get("username")
@@ -161,10 +147,11 @@ def login():
         if not username or not password:
             return "Please enter your credentials", 400
         
-        # Ensure the password is correct
+        # Ensure the username is correct
         if len(user) != 1:
             return "Incorrect username", 400
         
+        # Ensure the password is correct
         elif not check_password_hash(user[0]["hash"], password):
             return "Incorrect password", 400
         
@@ -173,21 +160,20 @@ def login():
         session["username"] = user[0]["username"]
     return redirect("/")
 
-@app.route("/logout", methods=["POST"])
+@app.route("/logout")
 @login_required
 def logout():
-    if request.method == "POST":
-        # Log the user out by clearing the session
-        session.clear()
-        return redirect("/login")
+    # Log the user out by clearing the session
+    session.clear()
+    return redirect("/")
 
 @app.route("/wheel")
 def wheel():
     return render_template("wheel.html")
 
-@app.route("/combos", methods=["GET", "POST"])
+@app.route("/my_palettes", methods=["GET", "POST"])
 @login_required
-def combos():
+def my_palettes():
     user_id = session["user_id"]
     if request.method == "GET":
         palettes = db.execute("SELECT * FROM combos WHERE user_id = ?", user_id)
@@ -199,20 +185,22 @@ def combos():
         if not name:
             name = "Untitled Palette"
         
-        if action == "save_palette":
+        # Proceed if the action has value save_palette
+        if action == "save_palette":   
             base_color = request.form.get("base_color")
             complementary = request.form.get("complementary")
             analogous = request.form.get("analogous")  
             triadic = request.form.get("triadic")
             
+            # Ensure the colors exist
             if not base_color or not complementary or not analogous or not triadic:
                 return "Invalid Palette", 400
             
-            # Save the palette to the database
+            # Save the palette in the database
             db.execute("INSERT INTO combos (user_id, base_color, complementary, analogous, triadic, name) VALUES (?, ?, ?, ?, ?, ?)", 
                        user_id, base_color, complementary, analogous, triadic, name)
 
-            return redirect("/combos")
+            return redirect("/my_palettes")
 
 @app.route("/color_matcher", methods=["GET", "POST"])
 def color_matcher():
@@ -221,7 +209,6 @@ def color_matcher():
     hex_color = None
     image_uploaded = False
     color = None
-
     palettes = {}
 
     if request.method == "POST":
@@ -234,6 +221,7 @@ def color_matcher():
              if not image or image.filename == "":
                 return "No image uploaded", 400
              
+             # Ensure the file type is supported
              if not file_validity(image.filename):
                 return "Invalid file type", 400
              
@@ -254,6 +242,7 @@ def color_matcher():
             color = request.form.get("color")
             hex_color = color
 
+            # Ensure hex_color is a hex value
             if not re.match(r"^#[0-9A-Fa-f]{6}$", hex_color):
                 return "Invalid Color", 400
             
